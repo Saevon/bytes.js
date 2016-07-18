@@ -2,13 +2,19 @@
 
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
+<!--
 [![Build Status][travis-image]][travis-url]
 [![Test Coverage][coveralls-image]][coveralls-url]
-
+ -->
 Utility to parse a string bytes (ex: `1TB`) to bytes (`1,000,000,000,000`) and vice-versa.
 
 This uses the byte units defined in ISO/IEC 80000-13:2008, both the binary prefixes and the original SI units.
 
+This is a fork of the [bytes][bytes] module, except:
+
+ * It uses IEC units by default
+ * Supports a wider range of units
+ * Supports changing to compatability mode, and formatting in whichever prefix type you prefix (binary, metric, compatibility)
 
 ## Supported Units
 
@@ -62,8 +68,9 @@ This is a [Node.js](https://nodejs.org/en/) module available through the
 [`npm install` command](https://docs.npmjs.com/getting-started/installing-npm-packages-locally):
 
 ```bash
-$ npm install bytes
+npm install bytes-iec
 ```
+
 
 ## Usage
 
@@ -223,13 +230,17 @@ bytes('1kB', {mode: 'metric'});
 
 ## License
 
-[MIT](LICENSE)
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/Saevon/bytes.js/blob/master/LICENSE)
 
+[downloads-image]: https://badgen.net/npm/dm/bytes-iec
+[downloads-url]: https://npmjs.org/package/bytes-iec
+[npm-image]: https://badgen.net/npm/node/bytes-iec
+[npm-url]: https://npmjs.org/package/bytes-iec
+[bytes]: https://github.com/visionmedia/bytes.js
+
+<!--
 [coveralls-image]: https://badgen.net/coveralls/c/github/visionmedia/bytes.js/master
 [coveralls-url]: https://coveralls.io/r/visionmedia/bytes.js?branch=master
-[downloads-image]: https://badgen.net/npm/dm/bytes
-[downloads-url]: https://npmjs.org/package/bytes
-[npm-image]: https://badgen.net/npm/node/bytes
-[npm-url]: https://npmjs.org/package/bytes
 [travis-image]: https://badgen.net/travis/visionmedia/bytes.js/master
 [travis-url]: https://travis-ci.org/visionmedia/bytes.js
+ -->
