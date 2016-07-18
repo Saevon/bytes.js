@@ -17,19 +17,19 @@ describe('Test constructor', function(){
     assert.strictEqual(bytes(function(){}), null);
     assert.strictEqual(bytes({}), null);
   });
-
-  it('Should be able to parse a string into a number', function(){
-    // This function is tested more accurately in another test suite
-    assert.equal(bytes('1KB'), 1024);
+  it('Shoud be able to parse a string into a number', function(){
+    // This function is testes more accurately in another test suite
+    assert.equal(bytes('1kB'), 1000);
   });
 
   it('Should convert a number into a string', function(){
-    // This function is tested more accurately in another test suite
-    assert.equal(bytes(1024), '1KB');
+    // This function is testes more accurately in another test suite
+    assert.equal(bytes(1000), '1kB');
   });
 
   it('Should convert a number into a string with options', function(){
     // This function is tested more accurately in another test suite
-    assert.equal(bytes(1000, {thousandsSeparator: ' '}), '1 000B');
+    assert.equal(bytes(1000, {thousandsSeparator: ' ', unit: "b"}), '1 000B');
+    assert.equal(bytes(1000, {unitSeparator: '---'}), '1---kB');
   });
 });

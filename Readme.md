@@ -5,7 +5,55 @@
 [![Build Status][travis-image]][travis-url]
 [![Test Coverage][coveralls-image]][coveralls-url]
 
-Utility to parse a string bytes (ex: `1TB`) to bytes (`1099511627776`) and vice-versa.
+Utility to parse a string bytes (ex: `1TB`) to bytes (`1,000,000,000,000`) and vice-versa.
+
+This uses the byte units defined in ISO/IEC 80000-13:2008, both the binary prefixes and the original SI units.
+
+
+## Supported Units
+
+Supported units and abbreviations are as follows and are case-insensitive:
+
+### Metric/Decimal Prefixes
+
+|      Value       | Abbr |   Name    |
+| ---------------- | ---- | --------- |
+| 1                | B    | byte      |
+| 1000<sup>1</sup> | kB   | kilobyte  |
+| 1000<sup>2</sup> | MB   | megabyte  |
+| 1000<sup>3</sup> | GB   | gigabyte  |
+| 1000<sup>4</sup> | TB   | terabyte  |
+| 1000<sup>5</sup> | PB   | petabyte  |
+| 1000<sup>6</sup> | EB   | exabyte   |
+| 1000<sup>7</sup> | ZB   | zettabyte |
+| 1000<sup>8</sup> | YB   | yottabyte |
+
+
+### Binary Prefixes:
+
+|      Value       | Abbr |   Name    |
+| ---------------- | ---- | --------- |
+| 1                | B    | byte      |
+| 1024<sup>1</sup> | KiB  | kibibyte  |
+| 1024<sup>2</sup> | MiB  | mebibyte  |
+| 1024<sup>3</sup> | GiB  | gibibyte  |
+| 1024<sup>4</sup> | TiB  | tebibyte  |
+| 1024<sup>5</sup> | PiB  | pebibyte  |
+| 1024<sup>6</sup> | EiB  | exbibyte  |
+| 1024<sup>7</sup> | ZiB  | zebibite  |
+| 1024<sup>8</sup> | YiB  | yobibite  |
+
+
+### Compatibility Binary Prefixes
+
+Overwrites the lower units of the metric system with the commonly misused prefixes
+
+|      Value       | Abbr |   Name    |
+| ---------------- | ---- | --------- |
+| 1000<sup>1</sup> | kB   | kilobyte  |
+| 1000<sup>2</sup> | MB   | megabyte  |
+| 1000<sup>3</sup> | GB   | gigabyte  |
+| 1000<sup>4</sup> | TB   | terabyte  |
 
 ## Installation
 
@@ -23,10 +71,16 @@ $ npm install bytes
 var bytes = require('bytes');
 ```
 
-#### bytes.format(number value, [options]): string｜null
+#### bytes.format(number value, [options]): string|null
 
 Format the given value in bytes into a string. If the value is negative, it is kept as such. If it is a float, it is
  rounded.
+
+It supports the following output formats:
+
+ * `binary`: uses the binary prefixes (KiB, MiB...)
+ * `decimal`|`metric`: uses the metric system (decimal) prefixes (kB, MB...)
+ * `compatibility`: uses the binary units, but the metric prefixes (kB == 1024B, MB...)
 
 **Arguments**
 
@@ -44,6 +98,7 @@ Format the given value in bytes into a string. If the value is negative, it is k
 | thousandsSeparator | `string`｜`null` | Example of values: `' '`, `','` and `.`... Default value to `''`. |
 | unit | `string`｜`null` | The unit in which the result will be returned (B/KB/MB/GB/TB). Default value to `''` (which means auto detect). |
 | unitSeparator | `string`｜`null` | Separator to use between number and unit. Default value to `''`. |
+| mode         | `string`&124;`null` | Which format to output: `binary`, `metric`, `decimal`, `compatibility`. Default value is `metric` |
 
 **Returns**
 
@@ -54,21 +109,32 @@ Format the given value in bytes into a string. If the value is negative, it is k
 **Example**
 
 ```js
-bytes(1024);
-// output: '1KB'
-
 bytes(1000);
-// output: '1000B'
+// output: '1kB'
 
 bytes(1000, {thousandsSeparator: ' '});
 // output: '1 000B'
 
+bytes(1024);
+// output: '1.02kB'
+
 bytes(1024 * 1.7, {decimalPlaces: 0});
 // output: '2KB'
 
-bytes(1024, {unitSeparator: ' '});
-// output: '1 KB'
+bytes(1000, {unitSeparator: ' '});
+// output: '1 kB'
 
+bytes(2048, {mode: 'binary'});
+// output: '2 KiB'
+
+bytes(1024 * 1024 * 2, {unit: 'KiB'});
+// output: '2048 KiB'
+
+bytes(1024 * 1024 * 2, {unit: 'KB'});
+// output: '2097.152 KB'
+
+bytes(1024 * 1024 * 2, {unit: 'KB', mode: 'compatibility'});
+// output: '2048 KB'
 ```
 
 #### bytes.parse(string｜number value): number｜null
@@ -76,21 +142,20 @@ bytes(1024, {unitSeparator: ' '});
 Parse the string value into an integer in bytes. If no unit is given, or `value`
 is a number, it is assumed the value is in bytes.
 
-Supported units and abbreviations are as follows and are case-insensitive:
+If the unit given has partial bytes, they are dropped (rounded down).
 
-  * `b` for bytes
-  * `kb` for kilobytes
-  * `mb` for megabytes
-  * `gb` for gigabytes
-  * `tb` for terabytes
-
-The units are in powers of two, not ten. This means 1kb = 1024b according to this parser.
 
 **Arguments**
 
 | Name          | Type   | Description        |
 |---------------|--------|--------------------|
 | value   | `string`｜`number` | String to parse, or number in bytes.   |
+| options | `Object` | Conversion options |
+
+
+|       Property       |          Type         | Description |
+| -------------------- | --------------------- | ----------- |
+| mode   | `string`&#124;`null` | Which mode to use (see `bytes.format`) |
 
 **Returns**
 
@@ -101,17 +166,23 @@ The units are in powers of two, not ten. This means 1kb = 1024b according to thi
 **Example**
 
 ```js
-bytes('1KB');
+bytes('1kB');
 // output: 1024
 
 bytes('1024');
 // output: 1024
 
-bytes(1024);
-// output: 1KB
+bytes('1.0001 kB');
+// output: 1000
+bytes('1.0001 KiB');
+// output: 1024
+
+bytes('1kB', {mode: compatibility});
+// output: 1024
 ```
 
-## License 
+
+## License
 
 [MIT](LICENSE)
 

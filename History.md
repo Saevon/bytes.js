@@ -1,3 +1,8 @@
+3.1.x
+=================
+  * Adds ISO/IEC 80000-13:2008 format
+    - Adds compatibility mode for parsing older programs
+
 3.0.0 / 2017-08-31
 ==================
 
@@ -9,6 +14,8 @@
 ==================
 
   * Add option "unit"
+  * Stricter parsing of bytes
+    - String is only parsed if units are recognized
 
 2.4.0 / 2016-06-01
 ==================
