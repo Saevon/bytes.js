@@ -15,6 +15,10 @@ describe('Test byte parse function', function(){
     assert.strictEqual(bytes.parse('0x11'), null);
   });
 
+  it('Should not accept partial units', function(){
+    assert.strictEqual(bytes.parse('10Mi'), null);
+  });
+
   it('Should parse raw number', function(){
     assert.strictEqual(bytes.parse(0), 0);
     assert.strictEqual(bytes.parse(-1), -1);
