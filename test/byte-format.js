@@ -74,12 +74,12 @@ describe('Test byte format function', function(){
     assert.equal(bytes.format(pb), '1PB');
   });
 
-  it('Should support compatibility mode', function(){
-    assert.equal(bytes.format(2.2 * kib, {mode: 'compatibility'}).toLowerCase(), '2.2kb');
-    assert.equal(bytes.format(mib, {mode: 'compatibility'}).toLowerCase(), '1mb');
-    assert.equal(bytes.format(gib, {mode: 'compatibility'}).toLowerCase(), '1gb');
-    assert.equal(bytes.format(tib, {mode: 'compatibility'}).toLowerCase(), '1tb');
-    assert.equal(bytes.format(pib, {mode: 'compatibility'}).toLowerCase(), '1024tb');
+  it('Should support jedec mode', function(){
+    assert.equal(bytes.format(2.2 * kib, {mode: 'jedec'}).toLowerCase(), '2.2kb');
+    assert.equal(bytes.format(mib, {mode: 'jedec'}).toLowerCase(), '1mb');
+    assert.equal(bytes.format(gib, {mode: 'jedec'}).toLowerCase(), '1gb');
+    assert.equal(bytes.format(tib, {mode: 'jedec'}).toLowerCase(), '1tb');
+    assert.equal(bytes.format(pib, {mode: 'jedec'}).toLowerCase(), '1024tb');
   });
 
   it('Should support metric mode', function(){
@@ -121,17 +121,17 @@ describe('Test byte format function', function(){
     assert.equal(bytes.format(kb, {unit: 'kB'}).toLowerCase(), '1kb');
   });
 
-  it('Should support using a specific unit in compatibility mode', function(){
-    assert.equal(bytes.format(1, {unit: 'b', mode:'compatibility'}).toLowerCase(), '1b');
-    assert.equal(bytes.format(kib, {unit: 'kb', mode:'compatibility'}).toLowerCase(), '1kb');
-    assert.equal(bytes.format(mib, {unit: 'mb', mode:'compatibility'}).toLowerCase(), '1mb');
-    assert.equal(bytes.format(gib, {unit: 'gb', mode:'compatibility'}).toLowerCase(), '1gb');
-    assert.equal(bytes.format(tib, {unit: 'tb', mode:'compatibility'}).toLowerCase(), '1tb');
+  it('Should support using a specific unit in jedec mode', function(){
+    assert.equal(bytes.format(1, {unit: 'b', mode:'jedec'}).toLowerCase(), '1b');
+    assert.equal(bytes.format(kib, {unit: 'kb', mode:'jedec'}).toLowerCase(), '1kb');
+    assert.equal(bytes.format(mib, {unit: 'mb', mode:'jedec'}).toLowerCase(), '1mb');
+    assert.equal(bytes.format(gib, {unit: 'gb', mode:'jedec'}).toLowerCase(), '1gb');
+    assert.equal(bytes.format(tib, {unit: 'tb', mode:'jedec'}).toLowerCase(), '1tb');
   });
 
-  it('Should support other units in compatibility mode', function(){
-    assert.equal(bytes.format(kib, {unit: 'kib', mode:'compatibility'}).toLowerCase(), '1kib');
-    assert.equal(bytes.format(tib, {unit: 'tib', mode:'compatibility'}).toLowerCase(), '1tib');
+  it('Should support other units in jedec mode', function(){
+    assert.equal(bytes.format(kib, {unit: 'kib', mode:'jedec'}).toLowerCase(), '1kib');
+    assert.equal(bytes.format(tib, {unit: 'tib', mode:'jedec'}).toLowerCase(), '1tib');
   });
 
   it('Support custom thousands separator', function(){

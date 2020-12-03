@@ -63,16 +63,16 @@ describe('Test byte parse function', function(){
     assert.equal(bytes.parse('1YB'), 1 * Math.pow(1000, 8));
   });
 
-  it('Should parse compatibility units', function(){
-    assert.equal(bytes.parse('1KB', {mode: 'compatibility'}), 1 * Math.pow(1024, 1));
-    assert.equal(bytes.parse('1MB', {mode: 'compatibility'}), 1 * Math.pow(1024, 2));
-    assert.equal(bytes.parse('1GB', {mode: 'compatibility'}), 1 * Math.pow(1024, 3));
-    assert.equal(bytes.parse('1TB', {mode: 'compatibility'}), 1 * Math.pow(1024, 4));
+  it('Should parse jedec units', function(){
+    assert.equal(bytes.parse('1KB', {mode: 'jedec'}), 1 * Math.pow(1024, 1));
+    assert.equal(bytes.parse('1MB', {mode: 'jedec'}), 1 * Math.pow(1024, 2));
+    assert.equal(bytes.parse('1GB', {mode: 'jedec'}), 1 * Math.pow(1024, 3));
+    assert.equal(bytes.parse('1TB', {mode: 'jedec'}), 1 * Math.pow(1024, 4));
   });
 
-  it('Should parse remaining normal units in compatibility mode', function(){
-    assert.equal(bytes.parse('1B', {mode: 'compatibility'}), 1);
-    assert.equal(bytes.parse('1YB', {mode: 'compatibility'}), 1 * Math.pow(1000, 8));
+  it('Should parse remaining normal units in jedec mode', function(){
+    assert.equal(bytes.parse('1B', {mode: 'jedec'}), 1);
+    assert.equal(bytes.parse('1YB', {mode: 'jedec'}), 1 * Math.pow(1000, 8));
   });
 
   it('Should assume bytes when no units', function(){

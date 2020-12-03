@@ -100,6 +100,23 @@ var compatibilityMap = _invertUnitMap([
 
 var parseRegExp = /^((-|\+)?(\d+(?:\.\d+)?)) *((k|m|g|t|p|e|z|y)?i?(b))?$/i;
 
+
+function _checkMode(mode) {
+  if (mode == 'compatibility') {
+    mode = 'jedec';
+  }
+  if (mode == 'decimal') {
+    mode = 'metric';
+  }
+
+  if (!/^(binary|metric|jedec)/.test(mode)) {
+    throw Error("bytes.js: invalid mode passed in: " + mode);
+  }
+
+  return mode;
+}
+
+
 /**
  * Convert the given value in bytes into a string or parse to string to an integer in bytes.
  *
@@ -135,6 +152,9 @@ function bytes(value, options) {
  * @param {string} mode
  */
 function withDefaultMode(mode) {
+  // Check that the mode is valid
+  mode = _checkMode(mode);
+
   // Adds the default mode to the method
   function setDefault(options) {
     options = (options !== undefined ? options : {});
@@ -195,8 +215,10 @@ function format(value, options) {
   var unitSeparator = (options && options.unitSeparator) || '';
   var decimalPlaces = (options && options.decimalPlaces !== undefined) ? options.decimalPlaces : 2;
   var fixedDecimals = Boolean(options && options.fixedDecimals);
-  var mode = (options && options.mode) || 'metric';
   var expectedUnit = (options && options.unit);
+
+  var mode = (options && options.mode) || 'metric';
+  mode = _checkMode(options.mode);
 
   // Find which set of units we're converting to
   var unitMap = _getUnitMap(mode);
@@ -232,14 +254,12 @@ function format(value, options) {
  */
 function _getUnitMap(mode) {
   // Allow the mode synonym
-  if (mode == 'decimal' || mode == 'metric') {
+  if (mode == 'metric') {
     return metricMap;
-  } else if (mode == 'compatibility') {
+  } else if (mode == 'jedec') {
     return compatibilityMap;
   } else if (mode == 'binary') {
     return binaryMap;
-  } else {
-    throw "bytes.js: invalid mode passed in: " + mode;
   }
 }
 
@@ -252,7 +272,7 @@ function _findUnit(unitMap, unit, mode) {
   unit = unit.toLowerCase();
 
   // Check the compatibility units first
-  if (mode == 'compatibility') {
+  if (mode == 'compatibility' || mode == 'jedec') {
     conversionUnit = allUnits['_' + unit];
   }
 
@@ -263,7 +283,7 @@ function _findUnit(unitMap, unit, mode) {
 
   // Finally if we still didn't find the unit, its an error
   if (conversionUnit === undefined) {
-    throw "byte.js: unit not found: " + unit;
+    throw Error("byte.js: unit not found: " + unit);
   }
 
   return conversionUnit;
@@ -311,7 +331,10 @@ function parse(val, options) {
     return null;
   }
 
-  var useCompatibility = (options && options.mode == 'compatibility') ? true : false;
+  // Mode info is only used to check for compatibility mode
+  // Since the mode is already in the units used
+  var mode = (options && options.mode) || 'metric';
+  mode = _checkMode(mode);
 
   // Test if the string passed is valid
   var results = parseRegExp.exec(val);
@@ -337,7 +360,7 @@ function parse(val, options) {
 
   var unitData;
   // If we're using compatibility units, try those first
-  if (useCompatibility) {
+  if (mode == 'jedec') {
     unitData = allUnits['_' + unit];
   }
 

@@ -8,13 +8,13 @@
  -->
 Utility to parse a string bytes (ex: `1TB`) to bytes (`1,000,000,000,000`) and vice-versa.
 
-This uses the byte units defined in ISO/IEC 80000-13:2008, both the binary prefixes and the original SI units.
+This uses the byte units defined in [ISO/IEC 80000-13:2008][iec-80000], both the binary prefixes and the original SI units.
 
 This is a fork of the [bytes][bytes] module, except:
 
  * It uses IEC units by default
  * Supports a wider range of units
- * Supports changing to compatability (JEDEC) mode, and formatting in whichever prefix type you prefix (binary, metric, compatibility)
+ * Supports changing to compatability ([JEDEC][jedec]) mode, and formatting in whichever prefix type you prefix (binary, metric, jedec)
 
 ## Supported Units
 
@@ -87,7 +87,7 @@ It supports the following output formats:
 
  * `binary`: uses the binary prefixes (KiB, MiB...)
  * `decimal`|`metric`: uses the metric system (decimal) prefixes (kB, MB...)
- * `compatibility`: uses the binary units, but the metric prefixes (kB == 1024B, MB...)
+ * `jedec`|`compatibility`: uses the binary units, but the metric prefixes (kB == 1024B, MB...)
 
 **Arguments**
 
@@ -105,7 +105,7 @@ It supports the following output formats:
 | thousandsSeparator | `string`｜`null` | Example of values: `' '`, `','` and `.`... Default value to `''`. |
 | unit | `string`｜`null` | The unit in which the result will be returned (B/KB/MB/GB/TB). Default value to `''` (which means auto detect). |
 | unitSeparator | `string`｜`null` | Separator to use between number and unit. Default value to `''`. |
-| mode         | `string`&124;`null` | Which format to output: `binary`, `metric`, `decimal`, `compatibility`. Default value is `metric` |
+| mode         | `string`&124;`null` | Which format to output: `binary`, `metric`, `decimal`, `jedec`, `compatibility`. Default value is `metric` |
 
 **Returns**
 
@@ -184,7 +184,7 @@ bytes('1.0001 kB');
 bytes('1.0001 KiB');
 // output: 1024
 
-bytes('1kB', {mode: compatibility});
+bytes('1kB', {mode: 'jedec'});
 // output: 1024
 ```
 
@@ -209,7 +209,7 @@ Returns a new module which acts like the `bytes` module, except with the given m
 **Example**
 
 ```js
-var bytes = require('bytes').withDefaultMode('compatibility');
+var bytes = require('bytes').withDefaultMode('jedec');
 
 bytes('1kB');
 // output: 1024
@@ -242,6 +242,8 @@ bytes('1kB', {mode: 'metric'});
 [npm-image]: https://badgen.net/npm/node/bytes-iec
 [npm-url]: https://npmjs.org/package/bytes-iec
 [bytes]: https://github.com/visionmedia/bytes.js
+[iec-800000]: https://en.wikipedia.org/wiki/Binary_prefix
+[jedec]: https://en.wikipedia.org/wiki/JEDEC_memory_standards#Unit_prefixes_for_semiconductor_storage_capacity
 
 <!--
 [travis-image]: https://badgen.net/travis/visionmedia/bytes.js/master

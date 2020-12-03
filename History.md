@@ -3,6 +3,12 @@ Bytes-IEC
 * Adds ISO/IEC 80000-13:2008 format
 - Adds compatibility mode for parsing older programs
 
+3.1.1 / Pending
+==================
+
+  * Adds jedec as an alias for compatibility mode
+  * Improves error checking for modes
+
 3.1.0 / 2019-01-22
 ==================
 
