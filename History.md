@@ -8,6 +8,7 @@ Bytes-IEC
 
   * Adds jedec as an alias for compatibility mode
   * Improves error checking for modes
+  * Adds TypeScript definitions
 
 3.1.0 / 2019-01-22
 ==================

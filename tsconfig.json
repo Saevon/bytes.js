@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "noEmit": true,
+    "paths": {
+      "bytes-iec": ["."]
+    },
+    "strict": true
+  },
+  "include": ["test/*.spec.ts"]
+}
