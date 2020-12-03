@@ -16,6 +16,8 @@ This is a fork of the [bytes][bytes] module, except:
  * Supports a wider range of units
  * Supports changing to compatability ([JEDEC][jedec]) mode, and formatting in whichever prefix type you prefix (binary, metric, jedec)
 
+ TypeScript definitions included.
+
 ## Supported Units
 
 Supported units and abbreviations are as follows and are case-insensitive:
