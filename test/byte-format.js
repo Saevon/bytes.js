@@ -4,7 +4,7 @@ var assert = require('assert');
 var bytes = require('..');
 
 describe('Test byte format function', function(){
-  var pb = Math.pow(1024, 5);
+  var pb = Math.pow(1000, 5);
   var tb = Math.pow(1000, 4),
       gb = Math.pow(1000, 3),
       mb = Math.pow(1000, 2),
