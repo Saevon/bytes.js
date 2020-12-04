@@ -6,23 +6,23 @@
 <!--
 [![Test Coverage][coveralls-image]][coveralls-url]
  -->
-Utility to parse a string bytes (ex: `1TB`) to bytes (`1,000,000,000,000`) and vice-versa.
+Utility to parse a size string in bytes (e.g. `'1kB'`, `'2KiB'`) to numeric (`1000`, `2048`) and vice-versa.
 
-This uses the byte units defined in [ISO/IEC 80000-13:2008][iec], both the binary prefixes and the original SI units.
+This is a fork of the [bytes][bytes-url] module, except it
 
-This is a fork of the [bytes][bytes] module, except:
+ * supports all of both the binary and decimal prefixes defined by [ISO/IEC 80000-13:2008][binary-wiki]
+ * supports [JEDEC][jedec-wiki], a legacy mode in which metric units have binary values
+ * uses decimal metric units by default, which can be overridden per call or by default
 
- * It uses IEC units by default
- * Supports a wider range of units
- * Supports changing to compatability ([JEDEC][jedec]) mode, and formatting in whichever prefix type you prefix (binary, metric, jedec)
-
- TypeScript definitions included.
+TypeScript definitions included.
 
 ## Supported Units
 
-Supported units and abbreviations are as follows and are case-insensitive:
+Supported units are as follows and are case-insensitive. Note that only the abbreviation will be parsed/formatted, the full names are for the reader's understanding only.
 
-### Metric/Decimal Prefixes
+### Metric
+
+Also referred to as SI. See [Compatibility Binary](#compatibility-binary) for legacy definitions.
 
 |      Value       | Abbr |   Name    |
 | ---------------- | ---- | --------- |
@@ -36,8 +36,9 @@ Supported units and abbreviations are as follows and are case-insensitive:
 | 1000<sup>7</sup> | ZB   | zettabyte |
 | 1000<sup>8</sup> | YB   | yottabyte |
 
+[More info][metric-wiki]
 
-### Binary Prefixes:
+### Binary
 
 |      Value       | Abbr |   Name    |
 | ---------------- | ---- | --------- |
@@ -51,17 +52,24 @@ Supported units and abbreviations are as follows and are case-insensitive:
 | 1024<sup>7</sup> | ZiB  | zebibite  |
 | 1024<sup>8</sup> | YiB  | yobibite  |
 
+[More info][binary-wiki]
 
-### Compatibility Binary Prefixes (JEDEC)
+### Compatibility Binary
 
-Overwrites the lower units of the metric system with the commonly misused prefixes
+Also referred to as JEDEC or legacy units.
+
+Overwrites the lower units of the metric system with the commonly misused values, i.e. metric units will be binary instead of decimal.
+This is the behavior of e.g. the Windows OS and [bytes][bytes-url].
+Units greater than terabyte are not supported.
 
 |      Value       | Abbr |   Name    |
 | ---------------- | ---- | --------- |
-| 1000<sup>1</sup> | kB   | kilobyte  |
-| 1000<sup>2</sup> | MB   | megabyte  |
-| 1000<sup>3</sup> | GB   | gigabyte  |
-| 1000<sup>4</sup> | TB   | terabyte  |
+| 1024<sup>1</sup> | kB   | kilobyte  |
+| 1024<sup>2</sup> | MB   | megabyte  |
+| 1024<sup>3</sup> | GB   | gigabyte  |
+| 1024<sup>4</sup> | TB   | terabyte  |
+
+[More info][jedec-wiki]
 
 ## Installation
 
@@ -73,23 +81,28 @@ This is a [Node.js](https://nodejs.org/en/) module available through the
 npm install bytes-iec
 ```
 
-
 ## Usage
 
 ```js
-var bytes = require('bytes');
+var bytes = require('bytes-iec');
 ```
+
+#### Modes
+
+Passing a unit type as `mode` parameter in API calls determines
+
+ * the set of units that will be favored by autodetection when no unit is specified
+ * the value/size of metric units: Compatibility mode makes them base-2 instead of base-10
+
+| Unit type                                     | `mode`                         |
+| --------------------------------------------- | ------------------------------ |
+| [Metric](#metric)                             | `'metric'` or `'decimal'`      |
+| [Binary](#binary)                             | `'binary'`                     |
+| [Compatibility Binary](#compatibility-binary) | `'compatibility'` or `'jedec'` |
 
 #### bytes.format(number value, [options]): string|null
 
-Format the given value in bytes into a string. If the value is negative, it is kept as such. If it is a float, it is
- rounded.
-
-It supports the following output formats:
-
- * `binary`: uses the binary prefixes (KiB, MiB...)
- * `decimal`|`metric`: uses the metric system (decimal) prefixes (kB, MB...)
- * `jedec`|`compatibility`: uses the binary units, but the metric prefixes (kB == 1024B, MB...)
+Format the given value in bytes into a string. If the value is negative, it's kept as such. If it's a float, it's rounded.
 
 **Arguments**
 
@@ -100,20 +113,20 @@ It supports the following output formats:
 
 **Options**
 
-| Property          | Type   | Description                                                                             |
-|-------------------|--------|-----------------------------------------------------------------------------------------|
-| decimalPlaces | `number`｜`null` | Maximum number of decimal places to include in output. Default value to `2`. |
-| fixedDecimals | `boolean`｜`null` | Whether to always display the maximum number of decimal places. Default value to `false` |
-| thousandsSeparator | `string`｜`null` | Example of values: `' '`, `','` and `.`... Default value to `''`. |
-| unit | `string`｜`null` | The unit in which the result will be returned (B/KB/MB/GB/TB). Default value to `''` (which means auto detect). |
-| unitSeparator | `string`｜`null` | Separator to use between number and unit. Default value to `''`. |
-| mode         | `string`&124;`null` | Which format to output: `binary`, `metric`, `decimal`, `jedec`, `compatibility`. Default value is `metric` |
+| Property           | Type              | Description                                                                                   | Default           |
+| ------------------ | ----------------- | --------------------------------------------------------------------------------------------- | ----------------- |
+| decimalPlaces      | `number`｜`null`  | Maximum number of decimal places to include in output                                         | `2`               |
+| fixedDecimals      | `boolean`｜`null` | Whether to always display the maximum number of decimal places, i.e. preserve trailing zeroes | `false`           |
+| thousandsSeparator | `string`｜`null`  | What to separate large numbers with, e.g. `','`, `'.'`, `' '`, ...                            | `''`              |
+| unit               | `string`｜`null`  | The unit in which the result will be returned: `'B'`, `'kB'`, `'KiB'`, ...                    | `''` (autodetect) |
+| unitSeparator      | `string`｜`null`  | Separator between numeric value and unit                                                      | `''`              |
+| mode               | `string`｜`null`  | Which mode to use (see [Modes](#modes))                                                       | `'metric'`        |
 
 **Returns**
 
 | Name    | Type             | Description                                     |
 |---------|------------------|-------------------------------------------------|
-| results | `string`｜`null` | Return null upon error. String value otherwise. |
+| results | `string`｜`null` | Returns null upon error, string value otherwise. |
 
 **Example**
 
@@ -151,26 +164,24 @@ bytes(1024 * 1024 * 2, {unit: 'KB', mode: 'compatibility'});
 Parse the string value into an integer in bytes. If no unit is given, or `value`
 is a number, it is assumed the value is in bytes.
 
-If the unit given has partial bytes, they are dropped (rounded down).
-
+If the value given has partial bytes, it's truncated (rounded down).
 
 **Arguments**
 
 | Name          | Type   | Description        |
 |---------------|--------|--------------------|
-| value   | `string`｜`number` | String to parse, or number in bytes.   |
+| value   | `string`｜`number` | String to parse, or number in bytes |
 | options | `Object` | Conversion options |
 
-
-|       Property       |          Type         | Description |
-| -------------------- | --------------------- | ----------- |
-| mode   | `string`&#124;`null` | Which mode to use (see `bytes.format`) |
+|       Property       |          Type         | Description | Default |
+| -------------------- | --------------------- | ----------- |---------|
+| mode   | `string`｜`null` | Which mode to use (see [Modes](#modes)) | `'metric'` |
 
 **Returns**
 
 | Name    | Type        | Description             |
 |---------|-------------|-------------------------|
-| results | `number`｜`null` | Return null upon error. Value in bytes otherwise. |
+| results | `number`｜`null` | Returns null upon error, value in bytes otherwise. |
 
 **Example**
 
@@ -190,23 +201,21 @@ bytes('1kB', {mode: 'jedec'});
 // output: 1024
 ```
 
-
 #### bytes.withDefaultMode(string mode): object
 
-Returns a new module which acts like the `bytes` module, except with the given mode as the default.
-
+Returns a new copy of the `bytes-iec` module, but with the given mode as the default.
 
 **Arguments**
 
 | Name          | Type     | Description        |
 |---------------|----------|--------------------|
-| mode          | `string` | Default mode to use   |
+| mode          | `string` | Default mode to use (see [Modes](#modes))   |
 
 **Returns**
 
 | Name    | Type        | Description             |
 |---------|-------------|-------------------------|
-| results | `object` | Returns the byte.js module, with a default mode |
+| results | `object` | Returns the byte.js module, with a default mode. |
 
 **Example**
 
@@ -229,7 +238,6 @@ bytes('1kB', {mode: 'metric'});
 // output: 1000
 ```
 
-
 ## License
 
 [MIT](LICENSE)
@@ -245,6 +253,7 @@ bytes('1kB', {mode: 'metric'});
 [npm-url]: https://npmjs.org/package/bytes-iec
 [travis-image]: https://badgen.net/travis/saevon/bytes.js/master
 [travis-url]: https://travis-ci.org/saevon/bytes.js
-[bytes]: https://github.com/visionmedia/bytes.js
-[iec]: https://en.wikipedia.org/wiki/Binary_prefix
-[jedec]: https://en.wikipedia.org/wiki/JEDEC_memory_standards#Unit_prefixes_for_semiconductor_storage_capacity
+[bytes-url]: https://github.com/visionmedia/bytes.js
+[binary-wiki]: https://en.wikipedia.org/wiki/Binary_prefix
+[metric-wiki]: https://en.wikipedia.org/wiki/Metric_prefix
+[jedec-wiki]: https://en.wikipedia.org/wiki/JEDEC_memory_standards#Unit_prefixes_for_semiconductor_storage_capacity
