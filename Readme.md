@@ -8,7 +8,7 @@
  -->
 Utility to parse a string bytes (ex: `1TB`) to bytes (`1,000,000,000,000`) and vice-versa.
 
-This uses the byte units defined in [ISO/IEC 80000-13:2008][iec-80000], both the binary prefixes and the original SI units.
+This uses the byte units defined in [ISO/IEC 80000-13:2008][iec], both the binary prefixes and the original SI units.
 
 This is a fork of the [bytes][bytes] module, except:
 
@@ -246,5 +246,5 @@ bytes('1kB', {mode: 'metric'});
 [travis-image]: https://badgen.net/travis/saevon/bytes.js/master
 [travis-url]: https://travis-ci.org/saevon/bytes.js
 [bytes]: https://github.com/visionmedia/bytes.js
-[iec-800000]: https://en.wikipedia.org/wiki/Binary_prefix
+[iec]: https://en.wikipedia.org/wiki/Binary_prefix
 [jedec]: https://en.wikipedia.org/wiki/JEDEC_memory_standards#Unit_prefixes_for_semiconductor_storage_capacity
