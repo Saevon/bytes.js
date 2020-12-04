@@ -2,8 +2,8 @@
 
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
-<!--
 [![Build Status][travis-image]][travis-url]
+<!--
 [![Test Coverage][coveralls-image]][coveralls-url]
  -->
 Utility to parse a string bytes (ex: `1TB`) to bytes (`1,000,000,000,000`) and vice-versa.
@@ -243,11 +243,8 @@ bytes('1kB', {mode: 'metric'});
 [downloads-url]: https://npmjs.org/package/bytes-iec
 [npm-image]: https://badgen.net/npm/node/bytes-iec
 [npm-url]: https://npmjs.org/package/bytes-iec
+[travis-image]: https://badgen.net/travis/saevon/bytes.js/master
+[travis-url]: https://travis-ci.org/saevon/bytes.js
 [bytes]: https://github.com/visionmedia/bytes.js
 [iec-800000]: https://en.wikipedia.org/wiki/Binary_prefix
 [jedec]: https://en.wikipedia.org/wiki/JEDEC_memory_standards#Unit_prefixes_for_semiconductor_storage_capacity
-
-<!--
-[travis-image]: https://badgen.net/travis/visionmedia/bytes.js/master
-[travis-url]: https://travis-ci.org/visionmedia/bytes.js
--->
