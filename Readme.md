@@ -71,7 +71,7 @@ Units greater than terabyte are not supported.
 
 [More info][jedec-wiki]
 
-## Installation
+# Installation
 
 This is a [Node.js](https://nodejs.org/en/) module available through the
 [npm registry](https://www.npmjs.com/). Installation is done using the
@@ -81,13 +81,13 @@ This is a [Node.js](https://nodejs.org/en/) module available through the
 npm install bytes-iec
 ```
 
-## Usage
+# Usage
 
 ```js
 var bytes = require('bytes-iec');
 ```
 
-#### Modes
+## Modes
 
 Passing a unit type as `mode` parameter in API calls determines
 
@@ -100,7 +100,7 @@ Passing a unit type as `mode` parameter in API calls determines
 | [Binary](#binary)                             | `'binary'`                     |
 | [Compatibility Binary](#compatibility-binary) | `'compatibility'` or `'jedec'` |
 
-#### bytes.format(number value, [options]): string|null
+## bytes.format(number value, [options]): string|null
 
 Format the given value in bytes into a string. If the value is negative, it's kept as such. If it's a float, it's rounded.
 
@@ -159,7 +159,7 @@ bytes(1024 * 1024 * 2, {unit: 'KB', mode: 'compatibility'});
 // output: '2048 KB'
 ```
 
-#### bytes.parse(string｜number value): number｜null
+## bytes.parse(string｜number value): number｜null
 
 Parse the string value into an integer in bytes. If no unit is given, or `value`
 is a number, it is assumed the value is in bytes.
@@ -201,7 +201,7 @@ bytes('1kB', {mode: 'jedec'});
 // output: 1024
 ```
 
-#### bytes.withDefaultMode(string mode): object
+## bytes.withDefaultMode(string mode): object
 
 Returns a new copy of the `bytes-iec` module, but with the given mode as the default.
 
@@ -238,7 +238,7 @@ bytes('1kB', {mode: 'metric'});
 // output: 1000
 ```
 
-## License
+# License
 
 [MIT](LICENSE)
 
