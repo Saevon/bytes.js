@@ -3,10 +3,12 @@
     "baseUrl": ".",
     "esModuleInterop": true,
     "module": "commonjs",
-    "noEmit": true,
     "paths": {
       "bytes-iec": ["."]
     },
+    "plugins": [
+      { "transform": "typescript-transform-paths" }
+    ],
     "strict": true
   },
   "include": ["test/*.spec.ts"]
