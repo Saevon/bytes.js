@@ -94,14 +94,14 @@ describe('Test withDefaultMode', function(){
 
 describe('Test bad modes', function(){
   it('should fail with unknown modes', function(){
-    assert.throws(() => {
-        bytes.withDefaultMode('unknown');
+    assert.throws(function() {
+      bytes.withDefaultMode('unknown');
     }, Error, "bytes.js: invalid mode passed in: unknown");
-    assert.throws(() => {
-        bytes.parse('1kb', {mode: 'unknown'});
+    assert.throws(function() {
+      bytes.parse('1kb', {mode: 'unknown'});
     }, Error, "bytes.js: invalid mode passed in: unknown");
-    assert.throws(() => {
-        bytes.format(1, {mode: 'unknown'});
+    assert.throws(function()  {
+      bytes.format(1, {mode: 'unknown'});
     }, Error, "bytes.js: invalid mode passed in: unknown");
   })
 })

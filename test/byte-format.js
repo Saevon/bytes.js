@@ -5,16 +5,16 @@ var bytes = require('..');
 
 describe('Test byte format function', function(){
   var pb = Math.pow(1000, 5);
-  var tb = Math.pow(1000, 4),
-      gb = Math.pow(1000, 3),
-      mb = Math.pow(1000, 2),
-      kb = Math.pow(1000, 1);
+  var tb = Math.pow(1000, 4);
+  var gb = Math.pow(1000, 3);
+  var mb = Math.pow(1000, 2);
+  var kb = Math.pow(1000, 1);
 
-  var pib = Math.pow(1024, 5),
-      tib = Math.pow(1024, 4),
-      gib = 1 << 30,
-      mib = 1 << 20,
-      kib = 1 << 10;
+  var pib = Math.pow(1024, 5);
+  var tib = Math.pow(1024, 4);
+  var gib = Math.pow(1024, 3);
+  var mib = Math.pow(1024, 2);
+  var kib = Math.pow(1024, 1);
 
   it('Should return null if input is invalid', function(){
     assert.strictEqual(bytes.format(undefined), null);
@@ -105,12 +105,12 @@ describe('Test byte format function', function(){
 
   it('Should error when given a bad unit', function(){
     assert.throws(
-      () => bytes.format(12 * mib, {unit: ''}).toLowerCase(),
-      "not found",
+      function(){ bytes.format(12 * mib, {unit: ''}); },
+      "not found"
     );
     assert.throws(
-      () => bytes.format(12 * mib, {unit: 'bb'}).toLowerCase(),
-      "not found",
+      function() { bytes.format(12 * mib, {unit: 'bb'}); },
+      "not found"
     );
   })
 
