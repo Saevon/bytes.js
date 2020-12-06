@@ -46,6 +46,7 @@
   "scripts": {
     "lint": "eslint .",
     "test": "mocha test/* --check-leaks --reporter spec --require ts-node/register --require tsconfig-paths/register",
+    "test-compat": "mocha test/*.js --check-leaks --reporter spec",
     "test-ci": "nyc --reporter=text npm test",
     "test-cov": "nyc --reporter=html --reporter=text npm test"
   }
