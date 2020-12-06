@@ -34,6 +34,11 @@ before_install:
       npm install --save-dev mocha@3.5.3
     fi
   - |
+    # Disable typecript before 0.10
+    if [[ "$(cut -d. -f1 <<< "$TRAVIS_NODE_VERSION")" -lt 6 ]]; then
+      npm uninstall --save-dev ts-node
+    fi
+  - |
     # nyc for coverage
     # - remove on Node.js < 6
     if [[ "$(cut -d. -f1 <<< "$TRAVIS_NODE_VERSION")" -lt 6 ]]; then
@@ -60,8 +65,10 @@ script:
     # Run test script, depending on nyc install
     if [[ -n "$(npm -ps ls nyc)" ]]; then
       npm run-script test-ci
-    else
+    elif [[ -n "$(npm -ps ls ts-node)" ]]; then
       npm test
+    else
+      npm run-script test-compat
     fi
   - |
     # Run linting, depending on eslint install
