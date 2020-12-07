@@ -36,7 +36,7 @@ before_install:
   - |
     # Disable typecript before 0.10
     if [[ "$(cut -d. -f1 <<< "$TRAVIS_NODE_VERSION")" -lt 6 ]]; then
-      npm uninstall --save-dev ts-node
+      npm uninstall --save-dev @types/mocha @types/node ts-node tsconfig-paths typescript
     fi
   - |
     # nyc for coverage
